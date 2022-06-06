@@ -19,4 +19,15 @@ Product.find = () => new Promise((resolve, reject) => {
   })
 })
 
+Product.findById = (id) => new Promise((resolve, reject) => {
+  connection.query('SELECT * FROM product WHERE id = ?', [id], (err, results) => {
+    if (err) reject(err)
+    
+    if (!results.length) 
+      return resolve(false)
+
+    resolve(results)
+  })
+})
+
 export default Product
