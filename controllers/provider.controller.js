@@ -1,7 +1,4 @@
 import Provider from "../models/provider.model.js"
-import Product from "../models/product.model.js"
-import ProviderProduct from "../models/provider.product.model.js"
-import { raw } from "mysql"
 
 export const getProviders = async (req, res) => {
   try {
@@ -45,35 +42,6 @@ export const getProvider = async (req, res) => {
       return res.status(404).json({ message: "Provider Not Found" });
     
     return res.json({ provider: provider.shift() })
-  } catch (error) {
-    res.status(500).json({ message: error })
-  }
-}
-
-export const addProducts = async (req, res) => {
-  const { provider, products } = req.body
-
-  try {
-    const providers = await Provider.find()
-    const providerData = providers.find(p => p.rif == provider) ?? false
-
-    if (!providerData) {
-      return res.status(404).json({ message: "Provider Not Found" })
-    }
-
-    const results = await Promise.all(
-      products.map(async product => {
-        const result = await Product.findById(product)
-        if (!result) return res.json({ message: 'Product Not Found' })
-        
-        const productId = result.shift().id
-        const providerProduct = await ProviderProduct.save({ provider: providerData.id, product: productId })
-
-        return providerProduct.insertId
-      })
-    )
-
-    res.json({ message: 'Products added successfully', products: results })
   } catch (error) {
     res.status(500).json({ message: error })
   }
