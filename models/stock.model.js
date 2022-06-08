@@ -22,4 +22,20 @@ Stock.findById = (id) => new Promise((resolve, reject) => {
   })
 })
 
+Stock.findByIdAndUpdate = (id, { initial, current, minimo }) => new Promise((resolve, reject) => {
+  connection.query('SELECT id FROM stock WHERE id = ?', [id], (err, results) => {
+    if (err) reject(err)
+    
+    if (!results.length) 
+      return resolve(false)
+
+    const put = [initial, current, minimo, id]
+    connection.query('UPDATE stock SET stock = ?, current_stock = ?, stock_min = ? WHERE id = ?', put, (err, results) => {
+      if (err) reject(err)
+    
+      resolve(results)
+    })
+  })
+})
+
 export default Stock
