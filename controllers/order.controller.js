@@ -60,7 +60,6 @@ export const createOrder = async (req, res) => {
 
     const stock = await Stock.findById(product)
     const rawStock = stock.shift()
-    console.log(rawStock)
 
     const editedStock = await Stock.findByIdAndUpdate(rawStock.id, {
       initial: rawStock.stock + amount,
