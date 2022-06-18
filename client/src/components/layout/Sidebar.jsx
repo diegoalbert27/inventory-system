@@ -14,46 +14,46 @@ export function Sidebar() {
       </div>
 
       <div className="d-flex flex-column border-bottom">
-        <div className="d-flex link-container p-3">
-          <Link className="outline-0" to="/customers">
+        <Link className="outline-0" to="/customers">
+          <div className="d-flex link-container p-3">
             <span className="me-5 fs-5 text-secondary">
               <FaUsers />
             </span>
             <span className="fs-5 text-secondary">Clientes</span>
-          </Link>
-        </div>
-        <div className="d-flex link-container p-3">
-          <Link className="outline-0" to="/providers">
+          </div>
+        </Link>
+        <Link className="outline-0" to="/providers">
+          <div className="d-flex link-container p-3">
             <span className="me-5 fs-5 text-secondary">
               <FaTruck />
             </span>
             <span className="fs-5 text-secondary">Proveedores</span>
-          </Link>
-        </div>
-        <div className="d-flex link-container p-3">
-          <Link className="outline-0" to="/products">
+          </div>
+        </Link>
+        <Link className="outline-0" to="/products">
+          <div className="d-flex link-container p-3">
             <span className="me-5 fs-5 text-secondary">
               <FaStoreAlt />
             </span>
             <span className="fs-5 text-secondary">Productos</span>
-          </Link>
-        </div>
-        <div className="d-flex link-container p-3">
-          <Link className="outline-0" to="/sales">
+          </div>
+        </Link>
+        <Link className="outline-0" to="/sales">
+          <div className="d-flex link-container p-3">
             <span className="me-5 fs-5 text-secondary">
               <FaShoppingCart />
             </span>
             <span className="fs-5 text-secondary">Ventas</span>
-          </Link>
-        </div>
-        <div className="d-flex link-container p-3">
-          <Link className="outline-0" to="/orders">
+          </div>
+        </Link>
+        <Link className="outline-0" to="/orders">
+          <div className="d-flex link-container p-3">
             <span className="me-5 fs-5 text-secondary">
               <FaShoppingBasket />
             </span>
             <span className="fs-5 text-secondary">Ordenes</span>
-          </Link>
-        </div>
+          </div>
+        </Link>
       </div>
     </nav>
   )
