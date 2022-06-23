@@ -40,48 +40,66 @@ export const getSales = async (req, res) => {
 }
 
 export const createSale = async (req, res) => {
-  const { product, customer, amount } = req.body
+  const { products, customer } = req.body
   try {
-    const isProduct = await Product.findById(product)
     const isCustomer = await Customer.findById(customer)
 
-    if (!isProduct)
-      return res.status(404).json({ message: "Product Not Found" })
     if (!isCustomer)
       return res.status(404).json({ message: "Customer Not Found" })
 
-    const rawProduct = isProduct.shift()
+    const codigo = uuidv4()
+    const dateCreated = formatDateNow()
+  
+    let isCompleted = false
 
-    const stock = await Stock.findById(product)
-    const rawStock = stock.shift()
+    const sales = await Promise.all(
+      products.map(async (product, i) => {
+        const isProduct = await Product.findById(product.id)
+        
+        if (!isProduct)
+          res.status(404).json({ message: "Product Not Found" })
+        
+        const rawProduct = isProduct.shift()
+        
+        const stock = await Stock.findById(rawProduct.id)
+        const rawStock = stock.shift()
+        
+        if (rawStock.current_stock <= rawStock.stock_min) {
+          res
+            .status(404)
+            .json({ message: "The amount product is in your min" })
+        }
+    
+        const editedStock = await Stock.findByIdAndUpdate(rawStock.id, {
+          initial: rawStock.stock,
+          current: rawStock.current_stock - product.amount,
+          minimo: rawStock.stock_min,
+        })
+    
+        if (!editedStock)
+          res.status(404).json({ message: "Stock Not Found" })
+    
+        const newSale = {
+          codigo,
+          customer,
+          dateCreated,
+          product: product.id,
+          price: rawProduct.price,
+          amount: product.amount,
+        }
+        
+        const savedSale = await Sale.save(newSale)
 
-    if (rawStock.current_stock <= rawStock.stock_min) {
-      return res
-        .status(404)
-        .json({ message: "The amount product is in your min" })
-    }
+        if (products.length === (i + 1)) {
+          isCompleted = !isCompleted
+        }
 
-    const editedStock = await Stock.findByIdAndUpdate(rawStock.id, {
-      initial: rawStock.stock,
-      current: rawStock.current_stock - amount,
-      minimo: rawStock.stock_min,
-    })
-
-    if (!editedStock)
-      return res.status(404).json({ message: "Stock Not Found" })
-
-    const newSale = {
-      codigo: uuidv4(),
-      customer: customer,
-      dateCreated: formatDateNow(),
-      product: product,
-      price: rawProduct.price,
-      amount,
-    }
-
-    const savedSale = await Sale.save(newSale)
-
-    return res.json({ message: "New sale added", sale: savedSale.insertId })
+        return { sale: { id: savedSale.insertId, customer } }
+      })
+    )
+    
+    if (isCompleted) return res.json({ message: "New sale added", sales })
+  
   } catch (error) {
     res.status(500).json({ message: error })
   }

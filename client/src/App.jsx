@@ -1,7 +1,7 @@
 import React from "react"
 import { Navbar } from "./components/layout/Navbar"
 import { Sidebar } from "./components/layout/Sidebar"
-import { HomePage, Product, ProductForm, Provider, ProviderForm, Sales, Orders, Customer, CustomerForm } from "./pages"
+import { HomePage, Product, ProductForm, Provider, ProviderForm, Sales, SalesForm, Orders, OrdersForm, Customer, CustomerForm } from "./pages"
 import { Routes, Route  } from "react-router-dom"
 
 export function App() {
@@ -29,7 +29,10 @@ export function App() {
               <Route path="/customers/add" element={<CustomerForm />} />
               
               <Route path="/sales" element={<Sales />} />
+              <Route path="/sales/add" element={<SalesForm />} />
+              
               <Route path="/orders" element={<Orders />} />
+              <Route path="/orders/add" element={<OrdersForm />} />
             </Routes>
           </div>
         </div>

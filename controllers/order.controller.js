@@ -40,48 +40,66 @@ export const getOrders = async (req, res) => {
 }
 
 export const createOrder = async (req, res) => {
-  const { product, provider, amount } = req.body
+  const { products, provider } = req.body
   try {
-    const isProduct = await Product.findById(product)
     const isProvider = await Provider.findById(provider)
-
-    if (!isProduct)
-      return res.status(404).json({ message: "Product Not Found" })
+    
     if (!isProvider)
       return res.status(404).json({ message: "Provider Not Found" })
-
-    const rawProduct = isProduct.shift()
+    
     const rawProvider = isProvider.shift()
 
-    if (rawProduct.provider !== rawProvider.id)
-      return res
-        .status(404)
-        .json({ message: "This provider not is part for this product" })
+    const codigo = uuidv4()
+    const dateCreated = formatDateNow()
 
-    const stock = await Stock.findById(product)
-    const rawStock = stock.shift()
+    let isCompleted = false
 
-    const editedStock = await Stock.findByIdAndUpdate(rawStock.id, {
-      initial: rawStock.stock + amount,
-      current: rawStock.stock + amount,
-      minimo: rawStock.stock_min,
-    })
+    const orders = await Promise.all(
+      products.map(async (product, i) => {
+        const isProduct = await Product.findById(product.id)
+        
+        if (!isProduct)
+          res.status(404).json({ message: "Product Not Found" })
+        
+        const rawProduct = isProduct.shift()
+        
+        if (rawProduct.provider !== rawProvider.id)
+          res
+            .status(404)
+            .json({ message: "This provider not is part for this product", product: product.id })
+    
+        const stock = await Stock.findById(product.id)
+        const rawStock = stock.shift()
+        
+        const editedStock = await Stock.findByIdAndUpdate(rawStock.id, {
+          initial: rawStock.stock + product.amount,
+          current: rawStock.stock + product.amount,
+          minimo: rawStock.stock_min,
+        })
+        
+        if (!editedStock)
+          res.status(404).json({ message: "Stock Not Found" })
+    
+        const newOrder = {
+          codigo,
+          provider: provider,
+          dateCreated,
+          product: product.id,
+          price: rawProduct.price,
+          amount: product.amount,
+        }
+        
+        const savedOrder = await Order.save(newOrder)
+        
+        if (products.length === (i + 1)) {
+          isCompleted = !isCompleted
+        }
 
-    if (!editedStock)
-      return res.status(404).json({ message: "Stock Not Found" })
+        return { order: { id: savedOrder.insertId, product: product.id } }
+      })
+    )
 
-    const newOrder = {
-      codigo: uuidv4(),
-      provider: provider,
-      dateCreated: formatDateNow(),
-      product: product,
-      price: rawProduct.price,
-      amount,
-    }
-
-    const savedOrder = await Order.save(newOrder)
-
-    return res.json({ message: "New order added", order: savedOrder.insertId })
+    if (isCompleted) return res.json({ message: "New order added", orders })
   } catch (error) {
     res.status(500).json({ message: error })
   }
