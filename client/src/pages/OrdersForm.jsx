@@ -96,7 +96,7 @@ export function OrdersForm() {
     const filterProducts = orderProducts.filter((product) => product.id !== id)
     const newProduct = orderProducts.find((product) => product.id === id)
     setProducts((product) => [...product, newProduct])
-    const newProducts = products.filter(p => p.provider.id == provider).concat(newProduct)
+    const newProducts = products.filter(p => p.provider.id === provider).concat(newProduct)
     setProduct(newProducts[0])
     setOrderProducts(filterProducts)
     const total = monto >= newProduct.price ? monto - newProduct.price : newProduct.price
