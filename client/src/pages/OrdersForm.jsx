@@ -28,12 +28,16 @@ export function OrdersForm() {
 
       const newProduct = products.data.products[0]
 
-      setProduct({ ...newProduct })
+      setProduct({ ...newProduct, amount: 1 })
       setProvider(providers.data.providers[0].id)
     })()
   }, [])
 
-  const handleSubmit = (e) => {}
+  const handleSubmit = (e) => {
+    e.preventDefault()
+
+    console.log('listo!!')
+  }
 
   const filterProducts = products.filter(
     (product) => product.provider.id === Number(provider)
@@ -46,13 +50,16 @@ export function OrdersForm() {
       (product) => product.provider.id === Number(value)
     )
     const newProduct = newProducts.shift()
-    setProduct(newProduct)
+    setProduct({ ...newProduct, amount: 1 })
+    setProducts(products.concat(orderProducts))
+    setOrderProducts([])
+    setMonto(0)
   }
 
   const handleChangeProduct = (e) => {
     const { value } = e.target
     const newProduct = products.find((product) => product.id === Number(value))
-    setProduct({ ...newProduct })
+    setProduct({ ...newProduct, amount: 1 })
   }
 
   const addProduct = () => {
@@ -60,16 +67,37 @@ export function OrdersForm() {
     setProducts(newProducts)
     setOrderProducts((order) => [...order, product])
     const newProduct = newProducts[0]
-    setProduct(newProduct)
+    setProduct({ ...newProduct, amount: 1 })
+    setMonto(monto => product.price + monto)
   }
 
   const removeProduct = (id) => {
     const filterProducts = orderProducts.filter((product) => product.id !== id)
     const newProduct = orderProducts.find((product) => product.id === id)
     setProducts((product) => [...product, newProduct])
+    const newProducts = products.filter(p => p.provider.id == provider).concat(newProduct)
+    setProduct(newProducts[0])
     setOrderProducts(filterProducts)
+    const total = monto >= newProduct.price ? monto - newProduct.price : newProduct.price
+    setMonto(total)
   }
 
+  const handleAmount = (product, amount) => {
+    const newProduct = { ...product }
+    newProduct.amount = amount
+    orderProducts[orderProducts.indexOf(product)] = newProduct
+    const newOrderProducts = [...orderProducts]
+    setOrderProducts(newOrderProducts)
+  }
+
+  const sumAmount = (product, amount) => {
+    const amountPrevius = product.price * product.amount
+    const amountInitial = monto >= amountPrevius ? monto - amountPrevius : amountPrevius - monto
+    const amountByProduct = product.price * amount
+    const total = amountInitial + amountByProduct
+    setMonto(total)
+  }
+  
   return (
     <div>
       <h2>
@@ -135,6 +163,8 @@ export function OrdersForm() {
                   key={product.id}
                   product={product}
                   removeProduct={removeProduct}
+                  handleAmount={handleAmount}
+                  sumAmount={sumAmount}
                 />
               ))}
             </div>
@@ -146,7 +176,7 @@ export function OrdersForm() {
                 name="price"
                 disabled
                 readOnly
-                defaultValue={monto}
+                value={monto.toFixed(2)}
               />
             </div>
             <div className="text-center">

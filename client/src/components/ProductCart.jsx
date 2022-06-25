@@ -1,9 +1,18 @@
 import React from "react"
 import { FaMinus } from "react-icons/fa"
 
-export function ProductCart({ product, removeProduct }) {
+export function ProductCart({ product, removeProduct, handleAmount, sumAmount }) {
   const handleRemove = () => {
     removeProduct(product.id)
+  }
+
+  const handleChange = (e) => {
+    const { value } = e.target
+    
+    if (Number(value)) {
+      handleAmount(product, Number(value))
+      sumAmount(product, Number(value))
+    }
   }
 
   return (
@@ -15,7 +24,7 @@ export function ProductCart({ product, removeProduct }) {
           className="form-control mb-2"
           disabled
           readOnly
-          defaultValue={product.name}
+          value={product.name}
         />
       </div>
       <div className="col-md-4">
@@ -23,7 +32,8 @@ export function ProductCart({ product, removeProduct }) {
         <input
           type="text"
           className="form-control"
-          defaultValue={"0"}
+          value={product.amount}
+          onChange={handleChange}
         />
       </div>
       <div className="col-md-2 p-2">
