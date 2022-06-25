@@ -1,13 +1,21 @@
 import React, { useEffect, useState } from 'react'
 import { FaShoppingBasket, FaPlusCircle } from 'react-icons/fa'
 import toast, { Toaster } from 'react-hot-toast'
-import { Link } from "react-router-dom"
+import { Link, useLocation } from "react-router-dom"
 import { Spinner } from '../components/Spinner'
 import { Table } from '../components/order/Table'
 import { getOrders } from '../api/order'
 
 export function Orders() {
   const [orders, setOrders] = useState([])
+
+  const location = useLocation()
+  
+  const notify = () => {
+    if (location.state) {
+      toast.success('Agregado Satisfactoriamente!')
+    }
+  }
 
   useEffect(() => {
     (async () => {
@@ -20,7 +28,7 @@ export function Orders() {
 
       //   return order.codigo === data.orders[i + 1].codigo
       // })
-      
+      notify()
       setOrders(data.orders)
     })()
   }, [])

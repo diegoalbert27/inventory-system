@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { FaShoppingCart, FaPlusCircle } from 'react-icons/fa'
 import toast, { Toaster } from 'react-hot-toast'
-import { Link } from "react-router-dom"
+import { Link, useLocation } from "react-router-dom"
 import { Spinner } from '../components/Spinner'
 import { Table } from '../components/sale/Table'
 import { getSales } from '../api/sale'
@@ -9,10 +9,19 @@ import { getSales } from '../api/sale'
 export function Sales() {
   const [sales, setSales] = useState([])
 
+  const location = useLocation()
+
+  const notify = () => {
+    if (location.state) {
+      toast.success('Agregado Satisfactoriamente!')
+    }
+  }
+
   useEffect(() => {
     (async () => {
       const { data } = await getSales()
       setSales(data.sales)
+      notify()
     })()
   }, [])
 

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react"
 import toast, { Toaster } from "react-hot-toast"
 import { useNavigate } from "react-router-dom"
-import { FaShoppingBasket, FaPlusCircle, FaMinus } from "react-icons/fa"
+import { FaShoppingBasket, FaPlusCircle } from "react-icons/fa"
 import { createOrder } from "../api/order"
 import { getProducts } from "../api/product"
 import { getProviders } from "../api/providers"
@@ -18,6 +18,8 @@ export function OrdersForm() {
 
   const [monto, setMonto] = useState(0)
 
+  const navigate = useNavigate()
+
   useEffect(() => {
     ;(async () => {
       const providers = await getProviders()
@@ -26,17 +28,36 @@ export function OrdersForm() {
       setProviders(providers.data.providers)
       setProducts(products.data.products)
 
-      const newProduct = products.data.products[0]
+      const provider = providers.data.providers[0].id
 
+      const newProducts = products.data.products.filter(product => product.provider.id === provider)
+      const newProduct = newProducts[0]
+      
       setProduct({ ...newProduct, amount: 1 })
-      setProvider(providers.data.providers[0].id)
+      setProvider(provider)
     })()
   }, [])
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
+    
+    if (isNaN(provider)) {
+      toast.error('Debe de elegir un proveedor')
+      return
+    }
 
-    console.log('listo!!')
+    if (orderProducts.length <= 0) {
+      toast.error('Debe de elegir los productos a ordenar')
+      return
+    }
+
+    const order = {
+      products: orderProducts,
+      provider
+    }
+
+    await createOrder(order)
+    navigate('/orders', { state: true })
   }
 
   const filterProducts = products.filter(
