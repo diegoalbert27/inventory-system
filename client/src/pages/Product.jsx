@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { FaStoreAlt, FaPlusCircle } from "react-icons/fa"
 import { Link, useLocation } from "react-router-dom"
 import toast, { Toaster } from 'react-hot-toast'
-import { getProducts } from '../api/product'
+import { getProducts, updateProduct } from '../api/product'
 import { Table } from '../components/product/Table'
 import { Spinner } from '../components/Spinner'
 
@@ -20,11 +20,25 @@ export function Product() {
   useEffect(() => {
     ;(async () => {
       const { data } = await getProducts()
-      const { products } = data
+      const products = data.products.filter(product => product.actived !== 0)
       setProducts(products)
       notify()
     })()
   }, [])
+
+  const removeProduct = async (id) => {
+    const newProducts = products.filter(product => product.id !== id)
+    const product = products.find(product => product.id === id)
+    const newProduct = {
+      ...product,
+      category: product.category.id,
+      provider: product.provider.id,
+      stock: product.stock.id,
+      actived: 0
+    }
+    await updateProduct(id, newProduct)
+    setProducts(newProducts)
+  }
 
   return (
     <section>
@@ -41,7 +55,7 @@ export function Product() {
         </Link>
         <div className="card-body card-table">
           <Toaster />
-          {products.length > 0 ? <Table products={products} /> : <Spinner />}
+          {products.length > 0 ? <Table products={products} removeProduct={removeProduct} /> : <Spinner />}
         </div>
       </div>
     </section>

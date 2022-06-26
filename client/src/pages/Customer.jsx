@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { FaUsers, FaPlusCircle } from "react-icons/fa"
 import { Link, useLocation } from "react-router-dom"
 import toast, { Toaster } from 'react-hot-toast'
-import { getCustomers } from '../api/customer'
+import { getCustomers, updateCustomer } from '../api/customer'
 import { Table } from '../components/customer/Table'
 import { Spinner } from '../components/Spinner'
 
@@ -20,11 +20,22 @@ export function Customer() {
   useEffect(() => {
     ;(async () => {
       const { data } = await getCustomers()
-      const { customers } = data
+      const customers = data.customers.filter(customer => customer.actived !== 0)
       setCustomers(customers)
       notify()
     })()
   }, [])
+
+  const removeCustomer = async (id) => {
+    const newCustomers = customers.filter(customer => customer.id !== id)
+    const customer = customers.find(customer => customer.id === id)
+    const newCustomer = {
+      ...customer,
+      actived: 0
+    }
+    await updateCustomer(id, newCustomer)
+    setCustomers(newCustomers)
+  }
 
   return (
     <section>
@@ -41,7 +52,7 @@ export function Customer() {
         </Link>
         <div className="card-body card-table">
           <Toaster />
-          {customers.length > 0 ? <Table customers={customers} /> : <Spinner />}
+          {customers.length > 0 ? <Table customers={customers} removeCustomer={removeCustomer} /> : <Spinner />}
         </div>
       </div>
     </section>

@@ -1,7 +1,7 @@
 import React from "react"
 import { Item } from "./Item"
 
-export function Table({ products }) {
+export function Table({ products, removeProduct }) {
   return (
     <table className="table table-sm">
       <thead>
@@ -20,7 +20,7 @@ export function Table({ products }) {
       </thead>
       <tbody>
         {products.map((product, i) => (
-          <Item key={product.id} product={product} i={i + 1} />
+          <Item key={product.id} product={product} i={i + 1} removeProduct={removeProduct} />
         ))}
       </tbody>
     </table>
