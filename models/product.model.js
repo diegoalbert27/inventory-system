@@ -19,6 +19,22 @@ Product.find = () => new Promise((resolve, reject) => {
   })
 })
 
+Product.findByIdAndUpdate = (id, { name, category, stock, description, actived, price, provider }) => new Promise((resolve, reject) => {
+  connection.query('SELECT id FROM product WHERE id = ?', [id], (err, results) => {
+    if (err) reject(err)
+    
+    if (!results.length) 
+      return resolve(false)
+
+    const put = [name, category, stock, description, actived, price, provider, id]
+    connection.query('UPDATE product SET name = ?, category = ?, stock = ?, description = ?, actived = ?, price = ?, provider = ? WHERE id = ?', put, (err, results) => {
+      if (err) reject(err)
+    
+      resolve(results)
+    })
+  })
+})
+
 Product.findById = (id) => new Promise((resolve, reject) => {
   connection.query('SELECT * FROM product WHERE id = ?', [id], (err, results) => {
     if (err) reject(err)
