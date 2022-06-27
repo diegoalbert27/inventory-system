@@ -12,7 +12,7 @@ export function Item({ order, i, viewOrder }) {
   return (
     <tr>
       <th>{i}</th>
-      <td>{codigo}</td>
+      <td>{codigo.toUpperCase()}</td>
       <td>{order.provider.name}</td>
       <td>{order.date_created.substring(0, 10)}</td>
       <td>

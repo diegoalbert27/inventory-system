@@ -12,7 +12,7 @@ export function Item({ sale, i, viewSale }) {
   return (
     <tr>
       <th>{i}</th>
-      <td>{codigo}</td>
+      <td>{codigo.toUpperCase()}</td>
       <td>{sale.customer.name}</td>
       <td>{sale.date_created.substring(0, 10)}</td>
       <td>
