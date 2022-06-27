@@ -57,7 +57,7 @@ export const createSale = async (req, res) => {
         const isProduct = await Product.findById(product.id)
         
         if (!isProduct)
-          res.status(404).json({ message: "Product Not Found" })
+          return { status: false, message: "Product Not Found" }
         
         const rawProduct = isProduct.shift()
         
@@ -65,9 +65,7 @@ export const createSale = async (req, res) => {
         const rawStock = stock.shift()
         
         if (rawStock.current_stock <= rawStock.stock_min) {
-          res
-            .status(404)
-            .json({ message: "The amount product is in your min" })
+          return { status: false, message: "The amount product is in your min" }
         }
     
         const editedStock = await Stock.findByIdAndUpdate(rawStock.id, {
@@ -77,7 +75,7 @@ export const createSale = async (req, res) => {
         })
     
         if (!editedStock)
-          res.status(404).json({ message: "Stock Not Found" })
+          return { status: false, message: "Stock Not Found" }
     
         const newSale = {
           codigo,
@@ -94,11 +92,11 @@ export const createSale = async (req, res) => {
           isCompleted = !isCompleted
         }
 
-        return { sale: { id: savedSale.insertId, customer } }
+        return { id: savedSale.insertId, status: true, customer }
       })
     )
     
-    if (isCompleted) return res.json({ message: "New sale added", sales })
+    return isCompleted ? res.json({ message: "New sales added", sales }) : res.json({ sales })
   
   } catch (error) {
     res.status(500).json({ message: error })

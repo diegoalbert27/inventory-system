@@ -37,24 +37,32 @@ export function SalesForm() {
 
   const handleSubmit = async (e) => {
     e.preventDefault()
-    
+
     if (isNaN(customer)) {
-      toast.error('Debe de elegir un proveedor')
+      toast.error("Debe de elegir un proveedor")
       return
     }
 
     if (saleProducts.length <= 0) {
-      toast.error('Debe de elegir los productos a ordenar')
+      toast.error("Debe de elegir los productos a ordenar")
       return
     }
 
     const sale = {
       products: saleProducts,
-      customer
+      customer,
     }
+
+    const newSales = await createSale(sale)
     
-    await createSale(sale)
-    navigate('/sales', { state: true })
+    const isRegistered = newSales.data.sales.map((sale) => sale.status)
+    
+    if (!isRegistered.shift()) {
+      toast.error('El stock de este producto ha llegado a su minimo')
+      return
+    }
+
+    navigate("/sales", { state: true })
   }
 
   const handleChange = (e) => {
@@ -76,7 +84,7 @@ export function SalesForm() {
     setSaleProducts((sale) => [...sale, product])
     const newProduct = newProducts[0]
     setProduct({ ...newProduct, amount: 1 })
-    setMonto(monto => product.price + monto)
+    setMonto((monto) => product.price + monto)
   }
 
   const removeProduct = (id) => {
@@ -84,7 +92,8 @@ export function SalesForm() {
     const newProduct = saleProducts.find((product) => product.id === id)
     setProducts((product) => [...product, newProduct])
     setSaleProducts(filterProducts)
-    const total = monto >= newProduct.price ? monto - newProduct.price : newProduct.price
+    const total =
+      monto >= newProduct.price ? monto - newProduct.price : newProduct.price
     setMonto(total)
   }
 
@@ -98,12 +107,13 @@ export function SalesForm() {
 
   const sumAmount = (product, amount) => {
     const amountPrevius = product.price * product.amount
-    const amountInitial = monto >= amountPrevius ? monto - amountPrevius : amountPrevius - monto
+    const amountInitial =
+      monto >= amountPrevius ? monto - amountPrevius : amountPrevius - monto
     const amountByProduct = product.price * amount
     const total = amountInitial + amountByProduct
     setMonto(total)
   }
-  
+
   return (
     <div>
       <h2>
