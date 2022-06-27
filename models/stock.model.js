@@ -11,6 +11,14 @@ Stock.save = ({ initial, minimo }) => new Promise((resolve, reject) => {
   })
 })
 
+Stock.find = () => new Promise((resolve, reject) => {
+  connection.query('SELECT * FROM stock', (err, results) => {
+    if (err) reject(err)
+
+    resolve(results)
+  })
+})
+
 Stock.findById = (id) => new Promise((resolve, reject) => {
   connection.query('SELECT * FROM stock WHERE id = ?', [id], (err, results) => {
     if (err) reject(err)
