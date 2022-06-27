@@ -31,8 +31,8 @@ export function ProductForm() {
       const dataProviders = await getProviders()
       const dataCategories = await getCategories()
       
-      const { categories } = dataCategories.data
-      const { providers } = dataProviders.data
+      const categories = dataCategories.data.categories.filter(category => category.actived !== 0)
+      const providers = dataProviders.data.providers.filter(provider => provider.actived !== 0)
       
       setProviders(providers)
       setCategories(categories)

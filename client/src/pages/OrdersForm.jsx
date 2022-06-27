@@ -22,15 +22,18 @@ export function OrdersForm() {
 
   useEffect(() => {
     ;(async () => {
-      const providers = await getProviders()
-      const products = await getProducts()
+      const dataProviders = await getProviders()
+      const dataProducts = await getProducts()
 
-      setProviders(providers.data.providers)
-      setProducts(products.data.products)
+      const providers = dataProviders.data.providers.filter(provider => provider.actived !== 0)
+      const products = dataProducts.data.products.filter(product => product.actived !== 0)
 
-      const provider = providers.data.providers[0].id
+      setProviders(providers)
+      setProducts(products)
 
-      const newProducts = products.data.products.filter(product => product.provider.id === provider)
+      const provider = providers[0].id
+
+      const newProducts = products.filter(product => product.provider.id === provider)
       const newProduct = newProducts[0]
       
       setProduct({ ...newProduct, amount: 1 })

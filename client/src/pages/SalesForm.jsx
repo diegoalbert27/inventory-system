@@ -22,16 +22,19 @@ export function SalesForm() {
 
   useEffect(() => {
     ;(async () => {
-      const customers = await getCustomers()
-      const products = await getProducts()
+      const dataCustomers = await getCustomers()
+      const dataProducts = await getProducts()
 
-      setCustomers(customers.data.customers)
-      setProducts(products.data.products)
+      const customers = dataCustomers.data.customers.filter(customer => customer.actived !== 0)
+      const products = dataProducts.data.products.filter(product => product.actived !== 0)
 
-      const newProduct = products.data.products[0]
+      setCustomers(customers)
+      setProducts(products)
+
+      const newProduct = products[0]
 
       setProduct({ ...newProduct, amount: 1 })
-      setCustomer(customers.data.customers[0].id)
+      setCustomer(customers[0].id)
     })()
   }, [])
 
