@@ -1,5 +1,5 @@
 import React from "react"
-import { FaArrowLeft, FaUsers, FaShoppingBasket, FaShoppingCart, FaStoreAlt, FaTruck } from "react-icons/fa"
+import { FaArrowLeft, FaUsers, FaShoppingBasket, FaShoppingCart, FaStoreAlt, FaTruck, FaListAlt } from "react-icons/fa"
 import { Link } from "react-router-dom"
 
 export function Sidebar() {
@@ -52,6 +52,14 @@ export function Sidebar() {
               <FaShoppingBasket />
             </span>
             <span className="fs-5 text-secondary">Ordenes</span>
+          </div>
+        </Link>
+        <Link className="outline-0" to="/categories">
+          <div className="d-flex link-container p-3">
+            <span className="me-5 fs-5 text-secondary">
+              <FaListAlt />
+            </span>
+            <span className="fs-5 text-secondary">Categorias</span>
           </div>
         </Link>
       </div>

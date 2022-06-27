@@ -15,6 +15,8 @@ import {
   Order,
   Customer,
   CustomerForm,
+  Category,
+  CategoryForm
 } from "./pages"
 import { Routes, Route } from "react-router-dom"
 
@@ -47,6 +49,9 @@ export function App() {
               <Route path="/orders" element={<Orders />} />
               <Route path="/orders/add" element={<OrdersForm />} />
               <Route path="/orders/:code" element={<Order />} />
+
+              <Route path="/categories" element={<Category />} />
+              <Route path="/categories/add" element={<CategoryForm />} />
             </Routes>
           </div>
         </div>
