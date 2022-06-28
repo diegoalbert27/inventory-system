@@ -21,7 +21,7 @@ Category.findById = (id) => new Promise((resolve, reject ) => {
   })
 })
 
-Category.save = ({ name, codigo, address, actived = 1 }) => new Promise((resolve, reject) => {
+Category.save = ({ name, codigo, actived = 1 }) => new Promise((resolve, reject) => {
   const post = [name, codigo, actived]
   connection.query('INSERT INTO category (name, codigo, actived) VALUES (?, ?, ?)', post, (err, results) => {
     if (err) reject(err)
