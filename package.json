@@ -5,7 +5,7 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "start": "node index.js",
+    "start": "npm run build:ui && node index.js",
     "build:ui": "npm run build --prefix client",
     "deploy": "git push heroku main",
     "dev": "NODE_ENV=development nodemon index.js"
