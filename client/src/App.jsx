@@ -1,61 +1,62 @@
-import React from "react"
-import { Navbar } from "./components/layout/Navbar"
-import { Sidebar } from "./components/layout/Sidebar"
-import {
-  HomePage,
-  Product,
-  ProductForm,
-  Provider,
-  ProviderForm,
-  Sales,
-  Sale,
-  SalesForm,
-  Orders,
-  OrdersForm,
-  Order,
-  Customer,
-  CustomerForm,
-  Category,
-  CategoryForm
-} from "./pages"
-import { Routes, Route } from "react-router-dom"
+import React, { useState, useEffect } from "react"
+import { loginAccess } from "./api/account"
+import { Login } from "./pages"
+import { Wrapper } from "./pages/Wrapper"
+import toast, { Toaster } from "react-hot-toast"
+import { config } from "./api/config"
 
 export function App() {
+  const [user, setUser] = useState(null)
+
+  const [username, setUsername] = useState("")
+  const [password, setPassword] = useState("")
+
+  const loginValidate = async ({ username, password }) => {
+    try {
+      const user = await loginAccess({ username, password })
+
+      window.localStorage.setItem("loggedInventorySystem", JSON.stringify(user))
+      
+      config.headers.Authorization = `Bearer ${user.token}`
+      
+      setUser(user)
+      setUsername("")
+      setPassword("")
+    } catch (error) {
+      toast.error('El usuario o contraseña son invalidos')
+    }
+  }
+
+  useEffect(() => {
+    const loggedUserJSON = window.localStorage.getItem('loggedInventorySystem')
+    if (loggedUserJSON) {
+      const user = JSON.parse(loggedUserJSON)
+      setUser(user)
+    }
+  }, [])
+
+  const logOut = () => {
+    window.localStorage.removeItem('loggedInventorySystem')
+    config.headers.Authorization = null
+    setUser(null)
+  }
+
   return (
-    <div className="wrapper bg-light">
-      <div className="row g-0 h-100 w-100">
-        <Sidebar />
-
-        <div className="col-md-9">
-          <Navbar brand="Sistema de Inventario" />
-
-          <div className="m-4">
-            <Routes>
-              <Route path="/" element={<HomePage />} />
-
-              <Route path="/products" element={<Product />} />
-              <Route path="/products/add" element={<ProductForm />} />
-
-              <Route path="/providers" element={<Provider />} />
-              <Route path="/providers/add" element={<ProviderForm />} />
-
-              <Route path="/customers" element={<Customer />} />
-              <Route path="/customers/add" element={<CustomerForm />} />
-
-              <Route path="/sales" element={<Sales />} />
-              <Route path="/sales/add" element={<SalesForm />} />
-              <Route path="/sales/:code" element={<Sale />} />
-
-              <Route path="/orders" element={<Orders />} />
-              <Route path="/orders/add" element={<OrdersForm />} />
-              <Route path="/orders/:code" element={<Order />} />
-
-              <Route path="/categories" element={<Category />} />
-              <Route path="/categories/add" element={<CategoryForm />} />
-            </Routes>
-          </div>
+    <>
+      {user ? (
+        <Wrapper logOut={logOut} />
+      ) : (
+        <div>
+          <Toaster />
+          <Login
+            username={username}
+            password={password}
+            changeUsername={setUsername}
+            changePassword={setPassword}
+            loginValidate={loginValidate}
+          />
         </div>
-      </div>
-    </div>
+      )}
+    </>
   )
 }

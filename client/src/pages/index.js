@@ -13,3 +13,4 @@ export { Sale } from './Sale'
 export { SalesForm } from './SalesForm'
 export { Category } from './Category'
 export { CategoryForm } from './CategoryForm'
+export { Login } from "./Login"

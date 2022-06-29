@@ -1,14 +1,14 @@
 import React from "react"
-import { FaArrowLeft, FaUsers, FaShoppingBasket, FaShoppingCart, FaStoreAlt, FaTruck, FaListAlt } from "react-icons/fa"
+import { FaPowerOff, FaUsers, FaShoppingBasket, FaShoppingCart, FaStoreAlt, FaTruck, FaListAlt } from "react-icons/fa"
 import { Link } from "react-router-dom"
 
-export function Sidebar() {
+export function Sidebar({ logOut }) {
   return (
     <nav className="col-md-3 h-100 bg-white border">
-      <div className="d-flex flex-row-reverse border-bottom">
-        <div className="p-3">
-          <span className="mr-3 h3 text-secondary">
-            <FaArrowLeft />
+      <div className="d-flex border-bottom">
+        <div className="pointer p-3" onClick={() => logOut()}>
+          <span className="mr-3 fs-5 text-secondary">
+            <FaPowerOff />
           </span>
         </div>
       </div>
