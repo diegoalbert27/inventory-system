@@ -6,7 +6,6 @@ import order from './order.routes.js'
 import sale from './sale.routes.js'
 import category from './category.routes.js'
 import user from './user.routes.js'
-import account from './account.routes.js'
 
 const router = Router()
 
@@ -17,6 +16,5 @@ router.use('/api/orders', order)
 router.use('/api/sales', sale)
 router.use('/api/category', category)
 router.use('/api/users', user)
-router.use('/api/account', account)
 
 export default router
