@@ -6,6 +6,8 @@ import morgan from 'morgan'
 import { extractUser } from './middleware/extractUser.js'
 import { handleErrors } from './middleware/handleErrors.js'
 import { notFound } from './middleware/notFound.js'
+
+import account from './routes/account.routes.js'
 import routes from './routes/index.routes.js'
 
 const app = express()
@@ -13,6 +15,7 @@ const app = express()
 app.use(morgan('dev'))
 app.use(express.json())
 
+app.use('/api/account', account)
 app.use(extractUser)
 app.use(routes)
 
