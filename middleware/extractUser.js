@@ -4,7 +4,7 @@ export function extractUser (req, res, next) {
   const authorization = req.get('authorization')
 
   let token = ''
-  console.log(authorization)
+  
   if (authorization && authorization.toLowerCase().startsWith('bearer')) {
     token = authorization.substring(7)
   }
