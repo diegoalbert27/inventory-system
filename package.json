@@ -5,8 +5,10 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "start": "node index.js",
-    "dev": "nodemon index.js"
+    "start": "npm run build:ui && NODE_ENV=production node index.js",
+    "build:ui": "npm run build --prefix client",
+    "deploy": "git add . && git commit -am full-deploy && git push heroku main",
+    "dev": "NODE_ENV=development nodemon index.js"
   },
   "keywords": [],
   "author": "",
