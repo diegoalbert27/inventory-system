@@ -10,10 +10,10 @@ export const loginRouter = async (req, res) => {
   const user = users.find((user) => user.username === username)
 
   const passwordCorrect =
-    user === null ? false : await bcrypt.compare(password, user.password)
+    !user ? false : await bcrypt.compare(password, user.password)
 
   if (!(user && passwordCorrect)) {
-    response.status(401).json({
+    return res.status(401).json({
       error: "invalid user or password",
     })
   }
