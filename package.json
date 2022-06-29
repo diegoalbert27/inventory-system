@@ -8,6 +8,7 @@
     "start": "node index.js",
     "build:ui": "npm run build --prefix client",
     "deploy": "git push heroku main",
+    "heroku-postbuild": "cd client && npm install && npm run build",
     "dev": "NODE_ENV=development nodemon index.js"
   },
   "keywords": [],
