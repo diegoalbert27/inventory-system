@@ -8,11 +8,13 @@ import { Spinner } from '../components/Spinner'
 
 export function Customer() {
   const [customers, setCustomers] = useState([])
+  const [loading, setLoading] = useState(false)
 
   const location = useLocation()
   
   const notify = () => {
     if (location.state) {
+      
       toast.success('Agregado Satisfactoriamente!')
     }
   }
@@ -21,6 +23,7 @@ export function Customer() {
     ;(async () => {
       const { data } = await getCustomers()
       const customers = data.customers.filter(customer => customer.actived !== 0)
+      setLoading(true)
       setCustomers(customers)
       notify()
     })()
@@ -39,7 +42,7 @@ export function Customer() {
 
   return (
     <section>
-      <h2>
+      <h2 className="p-3">
         <FaUsers /> Clientes
       </h2>
       
@@ -52,7 +55,7 @@ export function Customer() {
         </Link>
         <div className="card-body card-table">
           <Toaster />
-          {customers.length > 0 ? <Table customers={customers} removeCustomer={removeCustomer} /> : <Spinner />}
+          {loading ? <Table customers={customers} removeCustomer={removeCustomer} /> : <Spinner />}
         </div>
       </div>
     </section>

@@ -8,6 +8,7 @@ import { Spinner } from "../components/Spinner"
 
 export function Category() {
   const [categories, setCategories] = useState([])
+  const [loading, setLoading] = useState(false)
 
   const location = useLocation()
   
@@ -21,6 +22,7 @@ export function Category() {
     ;(async () => {
       const { data } = await getCategories()
       const categories = data.categories.filter(category => category.actived !== 0)
+      setLoading(true)
       setCategories(categories)
       notify()
     })()
@@ -39,7 +41,7 @@ export function Category() {
 
   return (
     <section>
-      <h2>
+      <h2 className="p-3">
         <FaListAlt /> Categorias
       </h2>
 
@@ -52,7 +54,7 @@ export function Category() {
         </Link>
         <div className="card-body card-table">
           <Toaster />
-          {categories.length > 0 ? (
+          {loading ? (
             <Table
               categories={categories}
               removeCategory={removeCategory}

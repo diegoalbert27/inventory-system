@@ -8,7 +8,8 @@ import { Spinner } from "../components/Spinner"
 
 export function Provider() {
   const [providers, setProviders] = useState([])
-
+  const [loading, setLoading] = useState(false)
+  
   const location = useLocation()
   
   const notify = () => {
@@ -22,6 +23,7 @@ export function Provider() {
       const { data } = await getProviders()
       const { providers } = data
       setProviders(providers)
+      setLoading(true)
       notify()
     })()
   }, [])
@@ -39,7 +41,7 @@ export function Provider() {
 
   return (
     <section>
-      <h2>
+      <h2 className="p-3">
         <FaTruck /> Proveedores
       </h2>
       
@@ -52,7 +54,7 @@ export function Provider() {
         </Link>
         <div className="card-body card-table">
           <Toaster />
-          {providers.length > 0 ? <Table providers={providers} removeProvider={removeProvider} /> : <Spinner />}
+          {loading ? <Table providers={providers} removeProvider={removeProvider} /> : <Spinner />}
         </div>
       </div>
     </section>

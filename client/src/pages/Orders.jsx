@@ -8,6 +8,7 @@ import { getOrders } from "../api/order"
 
 export function Orders() {
   const [orders, setOrders] = useState([])
+  const [loading, setLoading] = useState(false)
 
   const location = useLocation()
 
@@ -35,6 +36,7 @@ export function Orders() {
         .map(order => JSON.parse(order))
       
       notify()
+      setLoading(true)
       setOrders(orders)
     })()
   }, [])
@@ -43,7 +45,7 @@ export function Orders() {
 
   return (
     <section>
-      <h2>
+      <h2 className="p-3">
         <FaShoppingBasket /> Ordenes
       </h2>
 
@@ -56,7 +58,7 @@ export function Orders() {
         </Link>
         <div className="card-body card-table">
           <Toaster />
-          {orders.length > 0 ? <Table orders={orders} viewOrder={viewOrder} /> : <Spinner />}
+          {loading ? <Table orders={orders} viewOrder={viewOrder} /> : <Spinner />}
         </div>
       </div>
     </section>

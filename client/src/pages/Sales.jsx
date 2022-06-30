@@ -8,6 +8,7 @@ import { getSales } from '../api/sale'
 
 export function Sales() {
   const [sales, setSales] = useState([])
+  const [loading, setLoading] = useState(false)
 
   const location = useLocation()
 
@@ -35,6 +36,7 @@ export function Sales() {
         .map(sale => JSON.parse(sale))
       
       notify()
+      setLoading(true)
       setSales(sales)
     })()
   }, [])
@@ -42,7 +44,7 @@ export function Sales() {
   const viewSale = (code) => navigate(`/sales/${code}`)
 
   return (
-    <section>
+    <section className="p-3">
       <h2>
         <FaShoppingCart /> Ventas
       </h2>
@@ -56,7 +58,7 @@ export function Sales() {
         </Link>
         <div className="card-body card-table">
           <Toaster />
-          {sales.length > 0 ? <Table sales={sales} viewSale={viewSale} /> : <Spinner />}
+          {loading ? <Table sales={sales} viewSale={viewSale} /> : <Spinner />}
         </div>
       </div>
     </section>

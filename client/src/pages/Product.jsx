@@ -8,6 +8,7 @@ import { Spinner } from '../components/Spinner'
 
 export function Product() {
   const [products, setProducts] = useState([])
+  const [loading, setLoading] = useState(false)
 
   const location = useLocation()
   
@@ -22,6 +23,7 @@ export function Product() {
       const { data } = await getProducts()
       const products = data.products.filter(product => product.actived !== 0)
       setProducts(products)
+      setLoading(true)
       notify()
     })()
   }, [])
@@ -42,7 +44,7 @@ export function Product() {
 
   return (
     <section>
-      <h2>
+      <h2 className="p-3">
         <FaStoreAlt /> Productos
       </h2>
       
@@ -55,7 +57,7 @@ export function Product() {
         </Link>
         <div className="card-body card-table">
           <Toaster />
-          {products.length > 0 ? <Table products={products} removeProduct={removeProduct} /> : <Spinner />}
+          {loading ? <Table products={products} removeProduct={removeProduct} /> : <Spinner />}
         </div>
       </div>
     </section>
