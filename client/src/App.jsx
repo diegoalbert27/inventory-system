@@ -4,12 +4,15 @@ import { Login } from "./pages"
 import { Wrapper } from "./pages/Wrapper"
 import toast, { Toaster } from "react-hot-toast"
 import { config } from "./api/config"
+import { useNavigate } from "react-router-dom"
 
 export function App() {
   const [user, setUser] = useState(null)
 
   const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
+
+  const navigate = useNavigate()
 
   const loginValidate = async ({ username, password }) => {
     try {
@@ -38,6 +41,7 @@ export function App() {
   const logOut = () => {
     window.localStorage.removeItem('loggedInventorySystem')
     config.headers.Authorization = null
+    navigate('/')
     setUser(null)
   }
 
