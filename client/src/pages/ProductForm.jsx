@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react"
 import { FaStoreAlt } from "react-icons/fa"
 import { useNavigate } from "react-router-dom"
-import toast, { Toaster } from 'react-hot-toast';
+import toast, { Toaster } from "react-hot-toast"
 import { createProduct } from "../api/product"
 import { getProviders } from "../api/providers"
-import { getCategories } from "../api/category";
+import { getCategories } from "../api/category"
 
 export function ProductForm() {
   const [product, setProduct] = useState({
@@ -18,38 +18,42 @@ export function ProductForm() {
 
   const [stock, setStock] = useState({
     initial: 0,
-    minimo: 0
+    minimo: 0,
   })
 
   const [providers, setProviders] = useState([])
   const [categories, setCategories] = useState([])
-  
+
   const navigate = useNavigate()
 
   useEffect(() => {
-    (async () => {
+    ;(async () => {
       const dataProviders = await getProviders()
       const dataCategories = await getCategories()
-      
-      const categories = dataCategories.data.categories.filter(category => category.actived !== 0)
-      const providers = dataProviders.data.providers.filter(provider => provider.actived !== 0)
-      
+
+      const categories = dataCategories.data.categories.filter(
+        (category) => category.actived !== 0
+      )
+      const providers = dataProviders.data.providers.filter(
+        (provider) => provider.actived !== 0
+      )
+
       setProviders(providers)
       setCategories(categories)
 
       const newProduct = {
         ...product,
         category: categories[0].codigo,
-        provider: providers[0].rif
+        provider: providers[0].rif,
       }
-      
+
       setProduct(newProduct)
     })()
   }, [])
 
   const handleChange = (e) => {
     const { name, value } = e.target
-    setProduct(product => ({ ...product, [name]: value }))
+    setProduct((product) => ({ ...product, [name]: value }))
   }
 
   const handleChangeStock = (e) => {
@@ -60,21 +64,25 @@ export function ProductForm() {
   const handleSubmit = (e) => {
     e.preventDefault()
 
-    const fieldEmpty = Object.values(product).filter((field) => field === "").length
-    const fieldEmptyStock = Object.values(stock).filter((field) => field === "").length
-    
+    const fieldEmpty = Object.values(product).filter((field) => field === "")
+      .length
+    const fieldEmptyStock = Object.values(stock).filter((field) => field === "")
+      .length
+
     const isValid = fieldEmpty > 0 ? false : true
     const isValidStock = fieldEmptyStock > 0 ? false : true
 
     const createData = async () => {
       product.stock = stock
       await createProduct(product)
-      navigate('/products', { state: true })
+      navigate("/products", { state: true })
     }
-    
+
     product.stock = stock
 
-    isValid && isValidStock ? createData() : toast.error('Los campos son requeridos')
+    isValid && isValidStock
+      ? createData()
+      : toast.error("Los campos son requeridos")
   }
 
   return (
@@ -103,7 +111,15 @@ export function ProductForm() {
                 onChange={handleChange}
                 value={product.category}
               >
-                {categories.map(category => <option value={category.codigo} key={category.id}>{category.name}</option>)}
+                {categories.length > 0 ? (
+                  categories.map((category) => (
+                    <option value={category.codigo} key={category.id}>
+                      {category.name}
+                    </option>
+                  ))
+                ) : (
+                  <option value="">Sin Categorias</option>
+                )}
               </select>
             </div>
             <div className="col-4">
@@ -142,7 +158,7 @@ export function ProductForm() {
                 onChange={handleChange}
               />
             </div>
-            
+
             <div className="col">
               <label className="form-label">Proveedor</label>
               <select
@@ -151,8 +167,16 @@ export function ProductForm() {
                 onChange={handleChange}
                 multiple={false}
                 value={product.provider}
-                >
-                {providers.map(provider => <option value={provider.rif} key={provider.id}>{provider.name}</option>)}
+              >
+                {providers.length > 0 ? (
+                  providers.map((provider) => (
+                    <option value={provider.rif} key={provider.id}>
+                      {provider.name}
+                    </option>
+                  ))
+                ) : (
+                  <option value="">Sin Proveedores</option>
+                )}
               </select>
             </div>
 
