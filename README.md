@@ -2,6 +2,8 @@
 
 Sistema de inventario para el manejo de clientes, proveedores, productos, ventas y ordenes desarrollado con javascript, express, react, mysql, jwt y bootstrap. Parte de mis prácticas y aprendizaje como desarrollador web. 
 
+[Inventory-system](https://isda.herokuapp.com/)
+
 ## Caracteristicas
 
 - Administracion de Productos, Clientes y Proveedores
