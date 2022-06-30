@@ -11,11 +11,6 @@
   background-color: rgba(197, 197, 197, 0.452);
 }
 
-.card-table {
-  height: 26rem;
-  overflow: auto;
-}
-
 .pointer {
   cursor: pointer;
 }
