@@ -43,7 +43,7 @@ export function Product() {
   }
 
   return (
-    <section>
+    <section className="p-3">
       <h2 className="p-3">
         <FaStoreAlt /> Productos
       </h2>

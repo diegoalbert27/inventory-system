@@ -36,7 +36,7 @@ export function CustomerForm() {
   }
 
   return (
-    <div>
+    <div className="p-3">
       <h2>
         <FaUsers /> Agregar nuevo cliente
       </h2>

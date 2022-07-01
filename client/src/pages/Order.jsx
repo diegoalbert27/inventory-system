@@ -27,7 +27,7 @@ export function Order() {
   }, [])
 
   return (
-    <section>
+    <section className="p-3">
       <h2>
         <FaShoppingBasket /> Orden
       </h2>

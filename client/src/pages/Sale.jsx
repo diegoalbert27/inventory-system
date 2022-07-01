@@ -28,7 +28,7 @@ export function Sale() {
   }, [])
 
   return (
-    <section>
+    <section className="p-3">
       <h2>
         <FaShoppingCart /> Factura de venta
       </h2>

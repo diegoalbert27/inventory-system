@@ -118,7 +118,7 @@ export function SalesForm() {
   }
 
   return (
-    <div>
+    <div className="p-3">
       <h2>
         <FaShoppingBasket /> Agregar nuevo venta
       </h2>

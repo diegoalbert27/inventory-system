@@ -32,7 +32,7 @@ export function CategoryForm() {
   }
 
   return (
-    <div>
+    <div className="p-3">
       <h2>
         <FaListAlt /> Agregar nueva categoria
       </h2>

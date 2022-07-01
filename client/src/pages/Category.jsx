@@ -40,7 +40,7 @@ export function Category() {
   }
 
   return (
-    <section>
+    <section className="p-3">
       <h2 className="p-3">
         <FaListAlt /> Categorias
       </h2>

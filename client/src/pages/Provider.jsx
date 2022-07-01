@@ -40,7 +40,7 @@ export function Provider() {
   }
 
   return (
-    <section>
+    <section className="p-3">
       <h2 className="p-3">
         <FaTruck /> Proveedores
       </h2>

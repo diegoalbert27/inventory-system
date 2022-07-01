@@ -35,7 +35,7 @@ export function ProviderForm() {
   }
 
   return (
-    <div>
+    <div className="p-3">
       <h2>
         <FaTruck /> Agregar nuevo proveedor
       </h2>

@@ -86,7 +86,7 @@ export function ProductForm() {
   }
 
   return (
-    <div>
+    <div className="p-3">
       <h2>
         <FaStoreAlt /> Agregar nuevo producto
       </h2>

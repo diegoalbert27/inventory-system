@@ -123,7 +123,7 @@ export function OrdersForm() {
   }
   
   return (
-    <div>
+    <div className="p-3">
       <h2>
         <FaShoppingBasket /> Agregar nuevo orden
       </h2>

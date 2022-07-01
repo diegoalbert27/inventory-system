@@ -44,7 +44,7 @@ export function Orders() {
   const viewOrder = (code) => navigate(`/orders/${code}`)
 
   return (
-    <section>
+    <section className="p-3">
       <h2 className="p-3">
         <FaShoppingBasket /> Ordenes
       </h2>
